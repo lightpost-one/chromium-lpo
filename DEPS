@@ -295,11 +295,11 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
-  'src_internal_revision': 'f8e36dcd08ab67bfc9e717b3ed315fef7e8e6cba',
+  'src_internal_revision': '1b5d86e4bebea47727818094e814b14e35ea201f',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling Skia
   # and whatever else without interference from each other.
-  'skia_revision': '3ba7657e8745bffd1c6263d5555be935afbc0df9',
+  'skia_revision': 'd782fd600e2c44d09e751588189a54f1d3612484',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling V8
   # and whatever else without interference from each other.
@@ -391,7 +391,7 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling devtools-frontend
   # and whatever else without interference from each other.
-  'devtools_frontend_revision': 'e9d73469a63ea95c8a0a4c3f2094dc8223260386',
+  'devtools_frontend_revision': '13bf885d429a8a9d50f32a2626c9ee15f45cbc6d',
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling libprotobuf-mutator
   # and whatever else without interference from each other.
@@ -530,7 +530,7 @@ vars = {
   'libcxx_revision':       'a01c02c9d4acbdae3b7e8a2f3ee58579a9c29f96',
 
   # GN CIPD package version.
-  'gn_version': 'git_revision:ebc8f16ca7b0d36a3e532ee90896f9eb48e5423b',
+  'gn_version': 'git_revision:a84e399f9999003472192286abc03d752c9cb1f0',
 
   # ninja CIPD package.
   'ninja_package': 'infra/3pp/tools/ninja/',
@@ -1508,7 +1508,7 @@ deps = {
 
   'src/clank': {
     'url': Var('chrome_git') + '/clank/internal/apps.git' + '@' +
-    '4fafcbd7ef16a3588f72a09a2f799b5af2593499',
+    '0fb06f016070e049d0a14b1fc78ccd1428828da9',
     'condition': 'checkout_android and checkout_src_internal',
   },
 
@@ -2548,7 +2548,7 @@ deps = {
     Var('pdfium_git') + '/pdfium.git' + '@' +  Var('pdfium_revision'),
 
   'src/third_party/perfetto':
-    Var('chromium_git') + '/external/github.com/google/perfetto.git' + '@' + 'aeddce7011258bffbb8a870923202db97c34e655',
+    Var('chromium_git') + '/external/github.com/google/perfetto.git' + '@' + '504c0b8061ac73bd97f8282c3bacbd64615177f7',
 
   'src/base/tracing/test/data': {
     'bucket': 'perfetto',
@@ -2921,7 +2921,7 @@ deps = {
     Var('chromium_git') + '/webpagereplay.git' + '@' + Var('webpagereplay_revision'),
 
   'src/third_party/webrtc':
-    Var('webrtc_git') + '/src.git' + '@' + 'e4445e46a910eb407571ec0b0b8b7043562678cf',
+    Var('webrtc_git') + '/src.git' + '@' + '0411de876e46cca9b681f03a51f26144bec0efd6',
 
   # Wuffs' canonical repository is at github.com/google/wuffs, but we use
   # Skia's mirror of Wuffs, the same as in upstream Skia's DEPS file.
@@ -4707,7 +4707,7 @@ deps = {
 
   'src/ios_internal':  {
       'url': Var('chrome_git') + '/chrome/ios_internal.git' + '@' +
-        '9c335ea023a4935e0d6f7e2f4bfb97433b9e6d1f',
+        '6e9881b8d2144ae439580079ccb1d103d324c5dc',
       'condition': 'checkout_ios and checkout_src_internal',
   },
 

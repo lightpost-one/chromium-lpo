@@ -12044,6 +12044,21 @@
             ]
         }
     ],
+    "IOSMiniMapUniversalLink": [
+        {
+            "platforms": [
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "IOSMiniMapUniversalLink"
+                    ]
+                }
+            ]
+        }
+    ],
     "IOSOmahaResyncTimerOnForeground": [
         {
             "platforms": [
@@ -15989,21 +16004,6 @@
                         "IPH_PageInfo"
                     ],
                     "disable_features": []
-                }
-            ]
-        }
-    ],
-    "PageInfoLastVisitedIOS": [
-        {
-            "platforms": [
-                "ios"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "PageInfoLastVisitedIOS"
-                    ]
                 }
             ]
         }
