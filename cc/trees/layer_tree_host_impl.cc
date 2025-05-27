@@ -160,6 +160,8 @@ namespace {
 // kHitTestAsk after the threshold is reached.
 const size_t kAssumeOverlapThreshold = 100;
 
+constexpr auto kHasInputResetDelay = base::Milliseconds(250);
+
 // gfx::DisplayColorSpaces stores up to 3 different color spaces. This should be
 // updated to match any size changes in DisplayColorSpaces.
 constexpr size_t kContainsSrgbCacheSize = 3;
@@ -467,7 +469,11 @@ LayerTreeHostImpl::LayerTreeHostImpl(
       frame_trackers_(settings.single_thread_proxy_scheduler,
                       &dropped_frame_counter_),
       lcd_text_metrics_reporter_(LCDTextMetricsReporter::CreateIfNeeded(this)),
-      frame_rate_estimator_(GetTaskRunner()),
+      has_input_resetter_(
+          GetTaskRunner(),
+          base::BindRepeating(&LayerTreeHostImpl::ResetHasInputForFrameInterval,
+                              base::Unretained(this)),
+          kHasInputResetDelay),
       contains_srgb_cache_(kContainsSrgbCacheSize),
       zero_scroll_metrics_update_enabled_(
           base::FeatureList::IsEnabled(features::kZeroScrollMetricsUpdate)) {
@@ -699,6 +705,8 @@ void LayerTreeHostImpl::FinishCommit(
 
   for (auto& benchmark : state.benchmarks)
     ScheduleMicroBenchmark(std::move(benchmark));
+
+  new_local_surface_id_expected_ = false;
 
   // Dump property trees and layers if VerboseLogEnabled().
   VERBOSE_LOG() << "After finishing commit on impl, the sync tree:"
@@ -1163,7 +1171,8 @@ LayerTreeHostImpl::GetScopedEventMetricsMonitor(
 }
 
 void LayerTreeHostImpl::NotifyInputEvent(bool is_fling) {
-  frame_rate_estimator_.NotifyInputEvent();
+  has_input_for_frame_interval_ = true;
+  has_input_resetter_.Schedule();
   has_non_fling_input_since_last_frame_ |= (!is_fling);
 }
 
@@ -1413,11 +1422,8 @@ DrawResult LayerTreeHostImpl::CalculateRenderPasses(FrameData* frame) {
       active_tree()->property_trees()->effect_tree().HasCopyRequests();
 
   bool have_missing_animated_tiles = false;
-  int num_of_layers_with_videos = 0;
-
   const bool compute_video_layer_preferred_interval =
-      !features::UseSurfaceLayerForVideo() &&
-      features::IsUsingFrameIntervalDecider();
+      !features::UseSurfaceLayerForVideo();
 
   if (settings_.enable_compositing_based_throttling)
     throttle_decider_.Prepare();
@@ -1490,11 +1496,8 @@ DrawResult LayerTreeHostImpl::CalculateRenderPasses(FrameData* frame) {
         // LayerTreeHostImpl::DidDrawAllLayers().
         frame->will_draw_layers.push_back(layer);
 
-        if (layer->may_contain_video()) {
-          num_of_layers_with_videos++;
-          if (output_frame_data) {
-            frame->may_contain_video = true;
-          }
+        if (layer->may_contain_video() && output_frame_data) {
+          frame->may_contain_video = true;
         }
         if (output_frame_data && compute_video_layer_preferred_interval &&
             layer->GetLayerType() == mojom::LayerType::kVideo) {
@@ -1584,11 +1587,6 @@ DrawResult LayerTreeHostImpl::CalculateRenderPasses(FrameData* frame) {
     if (RequiresHighResToDraw())
       draw_result = DrawResult::kAbortedMissingHighResContent;
   }
-
-  // Only enable frame rate estimation if it would help lower the composition
-  // rate for videos.
-  const bool assumes_video_conference_mode = num_of_layers_with_videos > 1;
-  frame_rate_estimator_.SetVideoConferenceMode(assumes_video_conference_mode);
 
   // When doing a resourceless software draw, we don't have control over the
   // surface the compositor draws to, so even though the frame may not be
@@ -2920,6 +2918,18 @@ std::optional<SubmitInfo> LayerTreeHostImpl::DrawLayers(FrameData* frame) {
     layer_tree_frame_sink_->SubmitCompositorFrame(
         std::move(compositor_frame),
         /*hit_test_data_changed=*/false);
+
+    // After we submit a frame, if we're expecting a new local surface id, then
+    // notify about that immediately.
+    // TODO(vmpstr): When it comes to ViewTransitions, it is possible that we
+    // can just avoid sending the save directive/copy output requests until the
+    // next frame. However, because this frame submission might race with
+    // LayerTreeHostImpl::NotifyNewLocalSurfaceIdExpectedWhilePaused, this call
+    // is more consistent and 'resolves' the race as far as viz is concerned. If
+    // this is an issue in practice, we need to think of a different approach.
+    if (new_local_surface_id_expected_) {
+      layer_tree_frame_sink_->NotifyNewLocalSurfaceIdExpectedWhilePaused();
+    }
   }
 
 #if DCHECK_IS_ON()
@@ -3135,8 +3145,7 @@ viz::CompositorFrame LayerTreeHostImpl::GenerateCompositorFrame(
       frame->use_default_lower_bound_deadline);
   metadata.frame_interval_inputs.frame_time =
       CurrentBeginFrameArgs().frame_time;
-  metadata.frame_interval_inputs.has_input =
-      frame_rate_estimator_.input_priority_mode();
+  metadata.frame_interval_inputs.has_input = has_input_for_frame_interval_;
   metadata.frame_interval_inputs.has_user_input =
       has_non_fling_input_since_last_frame_;
   has_non_fling_input_since_last_frame_ = false;
@@ -3193,36 +3202,6 @@ viz::CompositorFrame LayerTreeHostImpl::GenerateCompositorFrame(
   // removed, then can set `has_only_content_frame_interval_updates`.
   metadata.frame_interval_inputs.has_only_content_frame_interval_updates =
       frame->damage_reasons.empty();
-
-  constexpr auto kFudgeDelta = base::Milliseconds(1);
-  constexpr auto kTwiceOfDefaultInterval =
-      viz::BeginFrameArgs::DefaultInterval() * 2;
-  constexpr auto kMinDelta = kTwiceOfDefaultInterval - kFudgeDelta;
-  if (mutator_host_->MainThreadAnimationsCount() == 0 &&
-      !mutator_host_->HasSmilAnimation() &&
-      mutator_host_->NeedsTickAnimations() &&
-      !frame_rate_estimator_.input_priority_mode() &&
-      mutator_host_->MinimumTickInterval() > kMinDelta) {
-    // All animations are impl-thread animations that tick at no more than
-    // half the default display compositing fps.
-    // Here and below with FrameRateEstimator::GetPreferredInterval(), the
-    // meta data's preferred_frame_interval is constrained to either 0 or
-    // twice the default interval. The reason is because GPU process side
-    // viz::FrameRateDecider is optimized for when all the preferred frame
-    // rates are similar.
-    // In general it may cause an animation to be less smooth if its fps is
-    // less than 30 fps and it updates at 30 fps. However, the frame rate
-    // reduction optimization is only applied when a webpage has two or more
-    // videos, i.e., very likely a video conferencing scene. It doesn't apply
-    // to general webpages.
-    metadata.preferred_frame_interval = kTwiceOfDefaultInterval;
-  } else {
-    // There are main-thread, high frequency impl-thread animations, or input
-    // events.
-    frame_rate_estimator_.WillDraw(CurrentBeginFrameArgs().frame_time);
-    metadata.preferred_frame_interval =
-        frame_rate_estimator_.GetPreferredInterval();
-  }
 
   metadata.activation_dependencies = std::move(frame->activation_dependencies);
   active_tree()->FinishSwapPromises(&metadata);
@@ -3580,7 +3559,6 @@ void LayerTreeHostImpl::DidNotProduceFrame(const viz::BeginFrameAck& ack,
         return "";
       }(reason),
       "Frame Sequence Number", ack.frame_id.sequence_number);
-  frame_rate_estimator_.DidNotProduceFrame();
   if (layer_tree_frame_sink_) {
     layer_tree_frame_sink_->DidNotProduceFrame(ack, reason);
   }
@@ -4930,6 +4908,16 @@ void LayerTreeHostImpl::ReturnResource(
   client_->ReturnResource(std::move(returned_resource));
 }
 
+void LayerTreeHostImpl::NotifyNewLocalSurfaceIdExpectedWhilePaused() {
+  if (new_local_surface_id_expected_) {
+    return;
+  }
+  new_local_surface_id_expected_ = true;
+  if (layer_tree_frame_sink_) {
+    layer_tree_frame_sink_->NotifyNewLocalSurfaceIdExpectedWhilePaused();
+  }
+}
+
 void LayerTreeHostImpl::CollectScrollbarUpdatesForCommit(
     CompositorCommitData* commit_data) const {
   commit_data->scrollbars.reserve(scrollbar_animation_controllers_.size());
@@ -6107,5 +6095,8 @@ bool LayerTreeHostImpl::RunningOnRendererProcess() const {
   return !settings().single_thread_proxy_scheduler;
 }
 
+void LayerTreeHostImpl::ResetHasInputForFrameInterval() {
+  has_input_for_frame_interval_ = false;
+}
 
 }  // namespace cc

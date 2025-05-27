@@ -139,6 +139,9 @@ class VideoFrameSubmitter::FrameSinkBundleProxy
     NOTREACHED();
   }
 
+  // Not used by VideoFrameSubmitter.
+  void NotifyNewLocalSurfaceIdExpectedWhilePaused() override { NOTREACHED(); }
+
   void DidNotProduceFrame(const viz::BeginFrameAck& ack) override {
     if (!bundle_) {
       return;
@@ -888,10 +891,6 @@ viz::CompositorFrame VideoFrameSubmitter::CreateCompositorFrame(
   viz::CompositorFrame compositor_frame;
   compositor_frame.metadata.begin_frame_ack = begin_frame_ack;
   compositor_frame.metadata.frame_token = frame_token;
-  compositor_frame.metadata.preferred_frame_interval =
-      video_frame_provider_
-          ? video_frame_provider_->GetPreferredRenderInterval()
-          : viz::BeginFrameArgs::MinInterval();
   if (video_frame_provider_) {
     compositor_frame.metadata.frame_interval_inputs.frame_time =
         last_begin_frame_args_.frame_time;

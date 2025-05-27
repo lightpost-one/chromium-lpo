@@ -2373,6 +2373,11 @@
     "expiry_milestone": 135
   },
   {
+    "name": "drop-input-events-while-paint-holding",
+    "owners": [ "mustaq@chromium.org", "blink-interactions-team@google.com" ],
+    "expiry_milestone": 150
+  },
+  {
     "name": "dse-preload2",
     "owners": ["kenoss@chromium.org", "chrome-prerendering@google.com"],
     "expiry_milestone": 145
@@ -7269,6 +7274,11 @@
     "expiry_milestone": 140
   },
   {
+    "name": "omnibox-show-popup-on-mouse-released",
+    "owners": ["jdonnelly@chromium.org", "chrome-desktop-search@google.com" ],
+    "expiry_milestone": 145
+  },
+  {
     "name": "omnibox-starter-pack-expansion",
     "owners": [
       "yoangela@chromium.org",
@@ -8293,6 +8303,11 @@
     // This is required by test teams to verify functionality on dev/beta
     // channels on devices which have no access to commandline flags.
     "expiry_milestone": -1
+  },
+  {
+    "name": "reload-tab-ui-resources-if-changed",
+    "owners": [ "acondor@chromium.org" ],
+    "expiry_milestone": 139
   },
   {
     "name": "remote-playback-backend",
@@ -9696,16 +9711,6 @@
     "owners": [ "mcasas@chromium.org", "chromeos-gfx@google.com" ],
     // This flag is used for ChromeOS media testing to mock a source device.
     "expiry_milestone": -1
-  },
-  {
-    "name": "use-frame-interval-decider",
-    "owners": [
-      "boliu@chromium.org",
-      "jonross@chromium.org",
-      "kylechar@chromium.org",
-      "//components/viz/OWNERS"
-    ],
-    "expiry_milestone": 140
   },
   {
     "name": "use-fullscreen-insets-api",

@@ -12498,6 +12498,22 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="Glic.Settings.TabstripButton.Disabled">
+  <owner>sanaakbani@google.com</owner>
+  <owner>iwells@chromium.org</owner>
+  <description>
+    Logged if the user disables the tabstrip button in glic settings.
+  </description>
+</action>
+
+<action name="Glic.Settings.TabstripButton.Enabled">
+  <owner>sanaakbani@google.com</owner>
+  <owner>iwells@chromium.org</owner>
+  <description>
+    Logged if the user enables the tabstrip button in glic settings.
+  </description>
+</action>
+
 <action name="Glic.Unpinned">
   <owner>charlesmeng@chromium.org</owner>
   <owner>erikchen@chromium.org</owner>
@@ -22159,6 +22175,14 @@ should be able to be added at any place in this file.
   <owner>radunitescu@google.com</owner>
   <owner>stkhapugin@google.com</owner>
   <description>Recorded when the user opens Lens View Finder.</description>
+</action>
+
+<action name="Mobile.LensViewFinder.PostCapture.Closed">
+  <owner>christianxu@google.com</owner>
+  <owner>stkhapugin@google.com</owner>
+  <description>
+    Recorded when the Lens View Finder post capture overlay UI is closed.
+  </description>
 </action>
 
 <action name="Mobile.Omnibox.iOS.PastedValidURL">

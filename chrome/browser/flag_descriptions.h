@@ -277,6 +277,9 @@ extern const char kDbdRevampDesktopDescription[];
 extern const char kDisableFacilitatedPaymentsMerchantAllowlistName[];
 extern const char kDisableFacilitatedPaymentsMerchantAllowlistDescription[];
 
+extern const char kDropInputEventsWhilePaintHoldingName[];
+extern const char kDropInputEventsWhilePaintHoldingDescription[];
+
 extern const char kHdrAgtmName[];
 extern const char kHdrAgtmDescription[];
 
@@ -362,6 +365,9 @@ extern const char kMediaSessionEnterPictureInPictureDescription[];
 #if BUILDFLAG(IS_ANDROID)
 extern const char kMvcUpdateViewWhenModelChangedName[];
 extern const char kMvcUpdateViewWhenModelChangedDescription[];
+
+extern const char kReloadTabUiResourcesIfChangedName[];
+extern const char kReloadTabUiResourcesIfChangedDescription[];
 #endif  // !BUILDFLAG(IS_ANDROID)
 
 extern const char kEnableDrDcName[];
@@ -375,9 +381,6 @@ extern const char kEnablePendingModePasswordsPromoDescription[];
 
 extern const char kUseAndroidStagingSmdsName[];
 extern const char kUseAndroidStagingSmdsDescription[];
-
-extern const char kUseFrameIntervalDeciderName[];
-extern const char kUseFrameIntervalDeciderDescription[];
 
 extern const char kUseSharedImagesForPepperVideoName[];
 extern const char kUseSharedImagesForPepperVideoDescription[];
@@ -1744,6 +1747,9 @@ extern const char kOmniboxContextualSuggestionsDescription[];
 
 extern const char kOmniboxFocusTriggersWebAndSRPZeroSuggestName[];
 extern const char kOmniboxFocusTriggersWebAndSRPZeroSuggestDescription[];
+
+extern const char kOmniboxShowPopupOnMouseReleasedName[];
+extern const char kOmniboxShowPopupOnMouseReleasedDescription[];
 
 extern const char kOmniboxHideSuggestionGroupHeadersName[];
 extern const char kOmniboxHideSuggestionGroupHeadersDescription[];

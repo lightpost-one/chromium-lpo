@@ -94,6 +94,7 @@ class VideoMockCompositorFrameSink
   MOCK_METHOD0(SetWantsAnimateOnlyBeginFrames, void());
   MOCK_METHOD0(SetWantsBeginFrameAcks, void());
   MOCK_METHOD0(SetAutoNeedsBeginFrame, void());
+  MOCK_METHOD0(NotifyNewLocalSurfaceIdExpectedWhilePaused, void());
 
   MOCK_METHOD2(DoSubmitCompositorFrame,
                void(const viz::LocalSurfaceId&, viz::CompositorFrame*));
@@ -1028,9 +1029,6 @@ TEST_F(VideoFrameSubmitterTest, PreferredInterval) {
   OnBeginFrame(args, {}, WTF::Vector<viz::ReturnedResource>());
   task_environment_.RunUntilIdle();
 
-  EXPECT_EQ(sink_->last_submitted_compositor_frame()
-                .metadata.preferred_frame_interval,
-            video_frame_provider_->preferred_interval);
   const auto& frame_interval_inputs =
       sink_->last_submitted_compositor_frame().metadata.frame_interval_inputs;
   ASSERT_EQ(frame_interval_inputs.content_interval_info.size(), 1u);

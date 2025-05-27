@@ -204,33 +204,10 @@ crbug.com/40849593 external/wpt/content-security-policy/media-src/media-src-7_1_
 # ====== Timed HTML parser budget tests to here ========================
 
 # ====== Mutation Events tests from here ========================
-
-# This is the virtual suite that should continue passing.
-crbug.com/1446498 virtual/mutation-events-enabled/* [ Pass ]
-
-# TODO(crbug.com/1446498) These are all of the files that test Mutation Events
-# directly. These can all be deleted once Mutation Events are disabled by
-# default and things have stabilized.
-crbug.com/1446498 dom/mutation-event-tests/* [ Failure Skip ]
-# These are immovable tests, either because they're WPT or http/tests/*.
-crbug.com/1446498 external/wpt/editing/crashtests/indent-outdent-after-closing-editable-dialog-element.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/editing/other/move-inserted-node-from-DOMNodeInserted-during-exec-command-insertHTML.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/042.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/043.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/044.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/045.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/054.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/html/semantics/scripting-1/the-script-element/execution-timing/055.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/uievents/legacy-domevents-tests/approved/domnodeinserted.html [ Failure Skip ]
-crbug.com/1446498 external/wpt/uievents/legacy-domevents-tests/approved/ProcessingInstruction.DOMCharacterDataModified.html [ Failure Skip ]
-crbug.com/1446498 http/tests/inspector-protocol/console/console-dom-mutation-violations.js [ Failure Skip ]
-crbug.com/1446498 http/tests/inspector-protocol/issues/mutation-events-issue.js [ Failure Skip ]
-crbug.com/1446498 virtual/text-antialias/split-text-crash.xhtml [ Failure Skip ]
-
 # TODO(crbug.com/1446498) These fail when Mutation Events are disabled, but
 # these are tests of other (non-Mutation-Event) things, and just happen to use
-# Mutation Events for the test. Triage and fix or remove all of these before
-# disabling Mutation Events by default.
+# Mutation Events for the test. These still need triage to either fix or remove
+# them. Mutation events have been removed.
 crbug.com/1446498 accessibility/details-summary-crash.html [ Failure Pass ]
 crbug.com/1446498 custom-elements/cereactions-with-exception.html [ Failure Pass ]
 crbug.com/1446498 dom/node/replace_child_recheck.html [ Failure Pass ]
@@ -263,8 +240,6 @@ crbug.com/1446498 fast/dom/mutation-event-for-fragment-insertion.html [ Pass Tim
 crbug.com/1446498 fast/events/window-onerror-isolatedworld-02.html [ Pass Timeout ]
 crbug.com/1446498 http/tests/xmlhttprequest/reentrant-cancel.html [ Pass Timeout ]
 crbug.com/1446498 svg/foreignObject/viewport-foreignobject-crash.html [ Pass Timeout ]
-
-
 # ====== Mutation Events tests to here ========================
 
 
@@ -310,12 +285,6 @@ crbug.com/379125943 wpt_internal/html/canvas/placeElement/placeElement-perspecti
 crbug.com/380039243 crbug.com/382294240 wpt_internal/html/canvas/placeElement/placeElement-draw-twice.html [ Failure ]
 
 # --- END canvasRenderingContext.placeElement() implementation
-
-# --- canvasRenderingContext.drawElement() implementation: issues.chromium.org/issues/417556295
-
-crbug.com/419363705 wpt_internal/html/canvas/drawElement/svg-foreign-object.html [ Failure ]
-
-# --- END canvasRenderingContext.drawElement() implementation
 
 # --- Skia roll test suppressions
 
@@ -1749,13 +1718,6 @@ crbug.com/40771785 http/tests/devtools/network/network-prefetch.js [ Failure ]
 crbug.com/1051044 external/wpt/css/filter-effects/effect-reference-feimage-001.html [ Failure Pass ]
 crbug.com/1051044 external/wpt/css/filter-effects/effect-reference-feimage-003.html [ Failure Pass ]
 
-# based on Builder Win7 Tests (1) and flakyness dashboard
-crbug.com/1325545 [ Win ] external/wpt/cookie-store/cookieListItem_attributes.https.any.html [ Failure Pass ]
-crbug.com/1325515 [ Win ] external/wpt/cookie-store/cookieListItem_attributes.https.any.serviceworker.html [ Failure Pass ]
-crbug.com/1325518 [ Win ] external/wpt/cookie-store/cookieStore_set_arguments.https.any.html [ Failure Pass ]
-crbug.com/1325538 [ Win ] external/wpt/cookie-store/cookieStore_set_arguments.https.any.serviceworker.html [ Failure Pass ]
-
-
 # On all platforms media tests don't currently use gpu-accelerated (proprietary)
 # codecs, so no benefit to running them again with gpu acceleration enabled.
 crbug.com/555703 virtual/media-gpu-accelerated/* [ Failure Skip ]
@@ -3051,7 +3013,6 @@ crbug.com/403340566 [ Win11-arm64 ] external/wpt/visual-viewport/page-and-offset
 crbug.com/402195188 [ Mac14 ] external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-unsafe-none.https.html?5-6 [ Crash ]
 crbug.com/401111779 [ Mac15-arm64 ] external/wpt/webrtc-stats/getStats-remote-candidate-ufrag.html [ Timeout ]
 crbug.com/401111779 [ Mac15 ] external/wpt/webrtc-stats/getStats-remote-candidate-ufrag.html [ Timeout ]
-[ Mac14-arm64 ] wpt_internal/hid/hid_requestDevice.https.window.html [ Timeout ]
 [ Mac14 ] external/wpt/urlpattern/urlpattern.https.any.serviceworker.html [ Crash Failure ]
 external/wpt/webvtt/rendering/cues-with-video/processing-model/portrait.tentative.html [ Failure ]
 external/wpt/webvtt/rendering/cues-with-video/processing-model/selectors/cue/fontsize_smaller_than_container.tentative.html [ Failure ]
@@ -3062,8 +3023,6 @@ crbug.com/399763756 [ Mac ] external/wpt/editing/whitespaces/forwarddelete-chars
 crbug.com/399711134 [ Mac ] virtual/threaded/external/wpt/css/css-view-transitions/navigation/root-and-nested-element-transition.html [ Failure ]
 crbug.com/398879934 [ Mac15-arm64 ] external/wpt/webrtc/legacy/simplecall_callbacks.optional.https.html [ Crash ]
 crbug.com/398879934 [ Mac15 ] external/wpt/webrtc/legacy/simplecall_callbacks.optional.https.html [ Crash ]
-[ Mac13 ] wpt_internal/hid/hidDevice_reports.https.window.html [ Timeout ]
-[ Mac14-arm64 ] wpt_internal/hid/hidDevice_reports.https.window.html [ Timeout ]
 crbug.com/398049421 [ Mac12 ] external/wpt/html/cross-origin-opener-policy/iframe-popup-same-origin-to-unsafe-none.https.html?3-4 [ Crash ]
 crbug.com/398077415 external/wpt/scroll-animations/css/view-timeline-pseudo-on-scroller.html [ Failure Pass ]
 crbug.com/398049418 [ Mac14 ] external/wpt/custom-elements/revamped-scoped-registry/Construct.tentative.html [ Failure Timeout ]
@@ -5465,6 +5424,10 @@ crbug.com/1092975 http/tests/inspector-protocol/target/target-expose-devtools-pr
 
 # The test failed due to https://crbug.com/372866278, https://crbug.com/40140417.
 crbug.com/40246707 external/wpt/webaudio/the-audio-api/the-audiocontext-interface/processing-after-resume.https.html [ Crash Failure Pass Timeout ]
+
+crbug.com/40701049 http/tests/devtools/console/console-object-preview.js [ Crash Failure Pass Timeout ]
+crbug.com/40701049 http/tests/devtools/console/console-preserve-scroll.js [ Crash Failure Pass Timeout ]
+crbug.com/40701049 http/tests/devtools/console/console-search.js [ Crash Failure Pass Timeout ]
 
 crbug.com/1093445 http/tests/loading/pdf-commit-load-callbacks.html [ Failure Pass ]
 crbug.com/1093497 http/tests/history/client-redirect-after-push-state.html [ Failure Pass ]
@@ -8846,9 +8809,6 @@ crbug.com/324441376 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling
 crbug.com/388445687 http/tests/devtools/console/console-copy-treeoutline.js [ Failure Pass ]
 crbug.com/388445687 http/tests/devtools/console/console-viewport-selection.js [ Failure Pass ]
 
-# Temporarily disabled to unblock https://crrev.com/c/6164904
-crbug.com/388445687 http/tests/devtools/a11y-axe-core/performance/settings-pane-a11y-test.js [ Failure Pass ]
-
 # Gardener 2024-06-28
 crbug.com/349938120 [ Linux ] wpt_internal/webmidi/requestmidiaccess-basic.https.html [ Failure Pass ]
 
@@ -9423,6 +9383,9 @@ crbug.com/417921517 [ Win11-arm64 ] external/wpt/css/css-ruby/ruby-text-combine-
 crbug.com/418345234 [ Win ] external/wpt/fetch/fetch-later/quota/max-payload.tentative.https.window.html [ Failure ]
 crbug.com/418572857 external/wpt/background-fetch/fetch.https.window.html [ Failure Pass Timeout ]
 crbug.com/418362694 [ Linux ] external/wpt/geolocation/enabled-by-permission-policy-attribute-redirect-on-load.https.sub.html [ Crash Timeout ]
+
+# Susceptible to subtle timing flakes
+crbug.com/415870039 external/wpt/web-animations/interfaces/Animation/finished.html [ Pass Failure ]
 
 # Skipped due to feature implementation in progress
 crbug.com/420393952 external/wpt/html/semantics/permission-element/quirks-mode-no-height-is-still-bounded.tentative.html [ Failure Skip ]

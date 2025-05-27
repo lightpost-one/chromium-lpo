@@ -121,6 +121,7 @@ class TestLayerTreeFrameSink::TestCompositorFrameSinkImpl
       std::optional<viz::HitTestRegionList> hit_test_region_list,
       uint64_t submit_time,
       SubmitCompositorFrameSyncCallback callback) override {}
+  void NotifyNewLocalSurfaceIdExpectedWhilePaused() override {}
   void InitializeCompositorFrameSinkType(
       viz::mojom::CompositorFrameSinkType type) override {}
   void BindLayerContext(viz::mojom::PendingLayerContextPtr context,
@@ -412,12 +413,6 @@ void TestLayerTreeFrameSink::OnNeedsBeginFrames(bool needs_begin_frames) {
 void TestLayerTreeFrameSink::SendCompositorFrameAckToClient() {
   DebugScopedSetImplThread impl(task_runner_provider_);
   client_->DidReceiveCompositorFrameAck();
-}
-
-base::TimeDelta TestLayerTreeFrameSink::GetPreferredFrameIntervalForFrameSinkId(
-    const viz::FrameSinkId& id,
-    viz::mojom::CompositorFrameSinkType* type) {
-  return viz::BeginFrameArgs::MinInterval();
 }
 
 }  // namespace cc

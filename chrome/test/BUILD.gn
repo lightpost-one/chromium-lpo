@@ -154,6 +154,7 @@ static_library("test_support") {
     "//chrome/browser/ui:ui_features",
     "//chrome/test/data/webui:resources",
     "//components/affiliations/core/browser:test_support",
+    "//components/supervised_user/core/browser:test_support",
   ]
 
   if (enable_background_mode) {
@@ -3087,8 +3088,6 @@ if (!is_android) {
       "../browser/idle/idle_browsertest.cc",
       "../browser/iframe_browsertest.cc",
       "../browser/image_fetcher/image_fetcher_impl_browsertest.cc",
-      "../browser/infobars/infobar_observer.cc",
-      "../browser/infobars/infobar_observer.h",
       "../browser/infobars/infobars_browsertest.cc",
       "../browser/interest_group/interest_group_permissions_browsertest.cc",
       "../browser/invalidation/profile_invalidation_provider_factory_browsertest.cc",
@@ -3723,6 +3722,7 @@ if (!is_android) {
       "//chrome/browser/apps/link_capturing:app_service_browser_tests",
       "//chrome/browser/contextual_cueing",
       "//chrome/browser/contextual_cueing:impl",
+      "//chrome/browser/infobars:test_support",
       "//chrome/browser/ui/search",
       "//chrome/browser/ui/web_applications:app_service_browser_tests",
       "//chrome/browser/web_applications:app_service_browser_tests",
@@ -3989,10 +3989,6 @@ if (!is_android) {
 
       if (target_cpu == "x64") {
         sources += [ "../common/profiler/thread_profiler_browsertest.cc" ]
-      }
-
-      if (is_chrome_branded) {
-        deps += [ "//chrome/browser/win/conflicts:browser_tests" ]
       }
     }
 
@@ -4965,6 +4961,7 @@ if (!is_android) {
         "//chrome/browser/ui/page_action:icon_type",
         "//chrome/browser/ui/tabs:test_support",
         "//chrome/browser/ui/toasts:browser_tests",
+        "//chrome/browser/ui/views/infobars",
         "//chrome/browser/ui/zoom:browser_tests",
         "//components/commerce/core:account_checker_test_support",
         "//components/commerce/core:shopping_service_test_support",
@@ -10088,6 +10085,7 @@ test("unit_tests") {
       "//chrome/browser/ui/toolbar/cast",
       "//chrome/browser/ui/views",
       "//chrome/browser/ui/views/frame:immersive_mode_controller",
+      "//chrome/browser/ui/views/infobars",
       "//chrome/browser/ui/views/page_action",
       "//components/app_constants",
       "//components/commerce/core:pref_names",
@@ -11102,6 +11100,7 @@ if (!is_android && !is_chromeos_device) {
       "//chrome/browser/ui/toasts:interactive_ui_tests",
       "//chrome/browser/ui/views/bubble",
       "//chrome/browser/ui/views/download",
+      "//chrome/browser/ui/views/infobars",
       "//chrome/browser/ui/views/page_action",
       "//chrome/browser/ui/views/side_panel",
       "//chrome/browser/ui/views/toolbar",

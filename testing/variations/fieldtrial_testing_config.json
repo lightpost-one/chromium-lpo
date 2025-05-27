@@ -15942,6 +15942,7 @@
                         "lens_overlay": "true",
                         "memory_saver": "true",
                         "offer_notification": "true",
+                        "price_insights": "true",
                         "translate": "true"
                     },
                     "enable_features": [
@@ -17111,6 +17112,24 @@
                     "name": "Enabled",
                     "enable_features": [
                         "CrOSLateBootMigrateToModernPin"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PinnedTabToastOnClose": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "PinnedTabToastOnClose"
                     ]
                 }
             ]
@@ -19624,6 +19643,21 @@
             ]
         }
     ],
+    "ReloadTabUiResourcesIfChanged": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "ReloadTabUiResourcesIfChanged"
+                    ]
+                }
+            ]
+        }
+    ],
     "RemotePageMetadataAndroid": [
         {
             "platforms": [
@@ -19971,6 +20005,24 @@
                         "LineBreakEarlyReturn",
                         "PaintLayerUpdateOptimizations",
                         "ScrollableAreaOptimization"
+                    ]
+                }
+            ]
+        }
+    ],
+    "ReportNotificationContentDetectionDataAndroid": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "ReportNotificationContentDetectionDataRate": "100"
+                    },
+                    "enable_features": [
+                        "ReportNotificationContentDetectionData"
                     ]
                 }
             ]
@@ -24189,15 +24241,45 @@
             ],
             "experiments": [
                 {
-                    "name": "UnimportantFrame_LowerPriority",
+                    "name": "ProcessPriority",
                     "enable_features": [
                         "UnimportantFramesPriority",
+                        "UserVisibleProcessPriority"
+                    ],
+                    "disable_features": [
+                        "RestrictThreadPoolInBackground",
+                        "SetIsolatesPriority",
+                        "ThrottleUnimportantFrameRate"
+                    ]
+                },
+                {
+                    "name": "RendererSettings",
+                    "enable_features": [
+                        "RestrictThreadPoolInBackground",
+                        "SetIsolatesPriority",
+                        "UnimportantFramesPriority"
+                    ],
+                    "disable_features": [
+                        "ThrottleUnimportantFrameRate",
                         "UserVisibleProcessPriority"
                     ]
                 },
                 {
-                    "name": "UnimportantFrame_LowerPriorityAndFrameRate",
+                    "name": "FrameRate",
                     "enable_features": [
+                        "ThrottleUnimportantFrameRate",
+                        "UnimportantFramesPriority"
+                    ],
+                    "disable_features": [
+                        "ThrottleUnimportantFrameRate",
+                        "UnimportantFramesPriority"
+                    ]
+                },
+                {
+                    "name": "All",
+                    "enable_features": [
+                        "RestrictThreadPoolInBackground",
+                        "SetIsolatesPriority",
                         "ThrottleUnimportantFrameRate",
                         "UnimportantFramesPriority",
                         "UserVisibleProcessPriority"

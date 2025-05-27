@@ -482,10 +482,6 @@
 #include "chrome/browser/media/cdm_pref_service_helper.h"
 #include "chrome/browser/media/media_foundation_service_monitor.h"
 #include "chrome/browser/os_crypt/app_bound_encryption_provider_win.h"
-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-#include "chrome/browser/win/conflicts/incompatible_applications_updater.h"
-#include "chrome/browser/win/conflicts/third_party_conflicts_manager.h"
-#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
 #endif  // BUILDFLAG(IS_WIN)
 
 #if BUILDFLAG(IS_WIN) || BUILDFLAG(IS_MAC)
@@ -1113,6 +1109,16 @@ inline constexpr char kSyncBagOfChips[] = "sync.bag_of_chips";
 inline constexpr char kSyncLastSyncedTime[] = "sync.last_synced_time";
 inline constexpr char kSyncLastPollTime[] = "sync.last_poll_time";
 inline constexpr char kSyncPollInterval[] = "sync.short_poll_interval";
+inline constexpr char kHasSeenWelcomePage[] = "browser.has_seen_welcome_page";
+
+#if BUILDFLAG(IS_WIN)
+// Deprecated 05/2025.
+inline constexpr char kIncompatibleApplications[] = "incompatible_applications";
+
+// Deprecated 05/2025.
+inline constexpr char kModuleBlocklistCacheMD5Digest[] =
+    "module_blocklist_cache_md5_digest";
+#endif  // BUILDFLAG(IS_WIN)
 
 // Register local state used only for migration (clearing or moving to a new
 // key).
@@ -1220,6 +1226,14 @@ void RegisterLocalStatePrefsForMigration(PrefRegistrySimple* registry) {
   // Deprecated 04/2025.
   registry->RegisterListPref(
       kPerformanceInterventionNotificationAcceptHistoryDeprecated);
+#endif
+
+#if BUILDFLAG(IS_WIN)
+  // Deprecated 05/2025.
+  registry->RegisterDictionaryPref(kIncompatibleApplications);
+
+  // Deprecated 05/2025.
+  registry->RegisterStringPref(kModuleBlocklistCacheMD5Digest, "");
 #endif
 }
 
@@ -1575,6 +1589,7 @@ void RegisterProfilePrefsForMigration(
   registry->RegisterTimePref(kSyncLastSyncedTime, base::Time());
   registry->RegisterTimePref(kSyncLastPollTime, base::Time());
   registry->RegisterTimeDeltaPref(kSyncPollInterval, base::TimeDelta());
+  registry->RegisterBooleanPref(kHasSeenWelcomePage, false);
 }
 
 }  // namespace
@@ -1825,10 +1840,6 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
       policy::policy_prefs::kNativeWindowOcclusionEnabled, true);
   MediaFoundationServiceMonitor::RegisterPrefs(registry);
   os_crypt_async::AppBoundEncryptionProviderWin::RegisterLocalPrefs(registry);
-#if BUILDFLAG(GOOGLE_CHROME_BRANDING)
-  IncompatibleApplicationsUpdater::RegisterLocalStatePrefs(registry);
-  ThirdPartyConflictsManager::RegisterLocalStatePrefs(registry);
-#endif  // BUILDFLAG(GOOGLE_CHROME_BRANDING)
 #endif  // BUILDFLAG(IS_WIN)
 
 #if BUILDFLAG(ENABLE_DOWNGRADE_PROCESSING)
@@ -2489,6 +2500,14 @@ void MigrateObsoleteLocalStatePrefs(PrefService* local_state) {
       kPerformanceInterventionNotificationAcceptHistoryDeprecated);
 #endif  // !BUILDFLAG(IS_ANDROID)
 
+#if BUILDFLAG(IS_WIN)
+  // Deprecated 05/2025.
+  local_state->ClearPref(kIncompatibleApplications);
+
+  // Deprecated 05/2025.
+  local_state->ClearPref(kModuleBlocklistCacheMD5Digest);
+#endif
+
   // Please don't delete the following line. It is used by PRESUBMIT.py.
   // END_MIGRATE_OBSOLETE_LOCAL_STATE_PREFS
 
@@ -2884,6 +2903,7 @@ void MigrateObsoleteProfilePrefs(PrefService* profile_prefs,
   profile_prefs->ClearPref(kSyncLastSyncedTime);
   profile_prefs->ClearPref(kSyncLastPollTime);
   profile_prefs->ClearPref(kSyncPollInterval);
+  profile_prefs->ClearPref(kHasSeenWelcomePage);
 
   // Please don't delete the following line. It is used by PRESUBMIT.py.
   // END_MIGRATE_OBSOLETE_PROFILE_PREFS
