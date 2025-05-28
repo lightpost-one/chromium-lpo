@@ -1148,6 +1148,14 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
           SidePanelEntryId::kReadingList, SidePanelOpenTrigger::kAppMenu);
       break;
 
+    // LPO commands
+    case IDC_SHOW_LPO_SIDE_PANEL:
+      fprintf(stderr, "LPO side-panel: ExecuteCommand. %i\n", id);
+      browser_->GetFeatures().side_panel_ui()->Show(
+          SidePanelEntry::Key(SidePanelEntryId::kLpo),
+          SidePanelOpenTrigger::kAppMenu);
+      break;
+
     case IDC_SHOW_READING_MODE_SIDE_PANEL: {
       // Yes. This is a separate feature from the reading list.
       browser_->GetFeatures().side_panel_ui()->Show(
@@ -1603,6 +1611,10 @@ void BrowserCommandController::InitCommandState() {
   UpdateCommandsForExtensionsMenu();
   UpdateCommandsForTabKeyboardFocus(GetKeyboardFocusedTabIndex(browser_));
   UpdateCommandsForWebContentsFocus();
+
+  // Add initialization for IDC_SHOW_LPO_SIDE_PANEL
+  // TODO: LPO Is this the right place to do this?
+  command_updater_.UpdateCommandEnabled(IDC_SHOW_LPO_SIDE_PANEL, true);
 }
 
 // static

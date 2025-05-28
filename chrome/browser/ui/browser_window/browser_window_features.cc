@@ -54,6 +54,9 @@
 #include "chrome/browser/ui/views/side_panel/extensions/extension_side_panel_manager.h"
 #include "chrome/browser/ui/views/side_panel/history/history_side_panel_coordinator.h"
 #include "chrome/browser/ui/views/side_panel/side_panel_coordinator.h"
+// LPO
+#include "chrome/browser/ui/views/side_panel/lpo_side_panel_view.h"
+
 #include "chrome/browser/ui/views/tabs/tab_strip_action_container.h"
 #include "chrome/browser/ui/views/toolbar/chrome_labs/chrome_labs_coordinator.h"
 #include "chrome/browser/ui/views/translate/translate_bubble_controller.h"
@@ -289,6 +292,16 @@ void BrowserWindowFeatures::InitPostBrowserViewConstruction(
       std::make_unique<BookmarksSidePanelCoordinator>();
 
   side_panel_coordinator_->Init(browser_view->browser());
+
+  if (side_panel_coordinator_) {
+    auto* registry = side_panel_coordinator_->GetWindowRegistry();
+    registry->Register(std::make_unique<SidePanelEntry>(
+        SidePanelEntry::Key(SidePanelEntryId::kLpo),     // wrap enum in Key
+        base::BindRepeating([](SidePanelEntryScope& /*scope*/) -> std::unique_ptr<views::View> {
+          return std::make_unique<LpoSidePanelView>();
+        }),
+        SidePanelEntry::kSidePanelDefaultContentWidth));
+  }
 
   extension_side_panel_manager_ =
       std::make_unique<extensions::ExtensionSidePanelManager>(

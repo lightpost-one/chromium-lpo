@@ -359,6 +359,10 @@ are declared in tools/grit/grit_args.gni.
         <ph name="BODY">$1<ex>another IDS string</ex></ph>
       </message>
 
+      <message name="IDS_SHOW_LPO_SIDE_PANEL" desc="Menu item: open the LPO side panel">
+        LPO side panel
+      </message>
+
       <!-- TODO add all of your "string table" messages here.  Remember to
       change nontranslateable parts of the messages into placeholders (using the
       <ph> element).  You can also use the 'grit add' tool to help you identify

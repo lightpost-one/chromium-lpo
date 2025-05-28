@@ -580,6 +580,9 @@
 // Glic button context menu and tabstrip context menu
 #define IDC_GLIC_TOGGLE_PIN 53320
 
+// LPO side panel
+#define IDC_SHOW_LPO_SIDE_PANEL 53321
+
 // NOTE: The last valid command value is 57343 (0xDFFF)
 // See http://msdn.microsoft.com/en-us/library/t2zechd4(VS.71).aspx
 

@@ -1787,6 +1787,9 @@ void AppMenuModel::Build() {
   // Build (and, by extension, Init) should only be called once.
   DCHECK_EQ(0u, GetItemCount());
 
+  AddItemWithStringId(IDC_SHOW_LPO_SIDE_PANEL, IDS_SHOW_LPO_SIDE_PANEL);
+  AddSeparator(ui::NORMAL_SEPARATOR);
+
   if (app_menu_icon_controller_ &&
       app_menu_icon_controller_->GetTypeAndSeverity().type ==
           AppMenuIconController::IconType::UPGRADE_NOTIFICATION) {

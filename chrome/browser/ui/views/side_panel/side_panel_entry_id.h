@@ -27,6 +27,7 @@
   V(kUserNote, kActionSidePanelShowUserNote, "UserNotes")                     \
   V(kFeed, kActionSidePanelShowFeed, "Feed")                                  \
   V(kWebView, std::nullopt, "WebView")                                        \
+  V(kLpo,      kActionSidePanelShowLpo, "LightpostOne")                       \
   /* Contextual Entries */                                                    \
   V(kSideSearch, kActionSidePanelShowSideSearch, "SideSearch")                \
   V(kLens, kActionSidePanelShowLens, "Lens")                                  \
